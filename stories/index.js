@@ -18,6 +18,7 @@ import Confirm from "components/Appointment/Confirm.jsx";
 import Status from "components/Appointment/Status.jsx";
 import Error from "components/Appointment/Error.jsx";
 import Form from "components/Appointment/Form.jsx";
+import { Fragment } from "react";
 
 storiesOf("Button", module)
   .addParameters({
@@ -149,7 +150,7 @@ storiesOf("Appointment", module)
   .add("Appointment", () => <Appointment />)
 
   .add("Appointment with Time", () => <Appointment time="12pm" />)
-
+ 
   .add("Header", () => <Header time="1201pm" />)
   
   .add("Empty", () => <Empty onAdd={action("onAdd")} />)
@@ -193,4 +194,24 @@ storiesOf("Appointment", module)
       onSave={action("onSave")} 
       onCancel={action("onCancel")} 
     />
-  ));
+  ))
+   
+  .add("Appointment Empty", () => (
+    <Fragment>
+      <Appointment id={1} time="4pm" />
+      <Appointment time="5pm" />
+    </Fragment>
+    )
+  )  
+  .add("Appointment Booked", () => (
+    <Fragment>
+      <Appointment
+        id={1}
+        time="4pm"
+        interview={{ student: "Lydia Miller-Jones", interviewer }}
+      />
+      <Appointment time="5pm" />    
+    </Fragment> 
+  ))
+  ;
+  
