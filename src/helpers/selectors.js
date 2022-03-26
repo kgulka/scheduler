@@ -9,3 +9,14 @@ export function getAppointmentsForDay(state, day) {
   }
   return dayAppointmentsObj.appointments.map(key => state.appointments[key]);
 }
+
+export  function getInterview(state, interview) {
+
+  if (!interview) {
+    return null;
+  }
+  const interviewer = state.interviewers[interview.interviewer]; 
+  const student = interview.student;
+  
+  return {interviewer, student};
+};
