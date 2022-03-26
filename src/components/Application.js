@@ -5,28 +5,33 @@ import axios from 'axios';
 import "components/Application.scss";
 import Appointment from "./Appointment";
 import DayList from "./DayList";
-//import getAppointmentsForDay from "helpers/selectors.js";
+import { getAppointmentsForDay } from "helpers/selectors";
 
 export default function Application(props) {
   const [state, setState] = useState({ day: "Monday", days: [], appointments:{} });
   const setDay = day => setState({ ...state, day });
 
-  const setDays = (days) => {
-    setState(prev => ({ ...prev, days }));
+  // const setDays = (days) => {
+  //   setState(prev => ({ ...prev, days }));
 
-  }
-
+  // }
   useEffect(() => {
-    
-    axios.get("/api/days")
-    .then((response) => {
-      setDays([...response.data]);
+    Promise.all([
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
+    ])
+      .then((all) => {
+        setState(prev => ({...prev, days: all[0].data, appointments: all[1].data}));
+        //, interviewers: all[2] 
+        console.log("result3:",all[2].data); // interviewers
+        console.log("state.days2:", state.days);
     })
-    .catch(err => console.log("err:",err.message));
-
+      .catch(err => console.log("err:",err.message));    
   }, []);
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
 
-  const appointmentsArr = Object.values(state.appointments).map(item => { 
+  const appointmentsArr = dailyAppointments.map(item => { 
     return (
       <Appointment 
         key={item.id} 
