@@ -1,28 +1,38 @@
 import "components/Appointment/styles.scss";
-
+import useVisualMode from "../../hooks/useVisualMode";
 import Header from "./Header";
 import Show from "./Show";
 import Empty from "./Empty";
-
-// export default function Appointment({ interview={student: "", interviewer: {} }, ...props}) {
-//   const { student, interviewer } = interview;
-//   return (
-//     <article className="appointment">
-//       <Header time={props.time} />
-//       {interviewer.name && <Show student={student} interviewer={interviewer.name}/> }
-//       {!interviewer.name && <Empty  /> } 
-//     </article>
-//   );
-// }
+import Form from "./Form";
 
 export default function Appointment(props) {
+  const EMPTY = "EMPTY";
+  const SHOW = "SHOW";
+  const CREATE = "CREATE";
+  const { mode, transition, back } = useVisualMode(
+    props.interview ? SHOW : EMPTY
+  );
 
   return (
     <article className="appointment">
       <Header time={props.time} />
-      {props.interview ? <Show student={props.interview.student} interview={props.interview.interviewer} />
-      : <Empty />}
+      {mode === EMPTY && <Empty onAdd={() => {
+            console.log("Clicked onAdd"); 
+            transition(CREATE);
+        }} />}
+      {mode === SHOW && (
+        <Show
+          student={props.interview.student}
+          interviewer={props.interview.interviewer}
+        />
+      )}
+       {mode === CREATE && (
+        <Form
+          interviewers={[]}
+          onSave={() => {console.log("Clicked onSave"); } }
+          onCancel={() => {back(); }}
+        />
+      )}
     </article>
   );
 }
-/* <Show student={props.interview.student} interviewer={props.interview.interviewer.name}/> }    */
