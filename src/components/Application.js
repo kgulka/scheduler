@@ -22,10 +22,9 @@ export default function Application(props) {
     return axios.put("/api/appointments/" + id, { interview })
       .then(function (response) {
         setState({...state, appointments});
-        
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   };
 
@@ -37,7 +36,7 @@ export default function Application(props) {
         setState({...state, appointments: newAppointments });
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   };
   const [state, setState] = useState({ 
