@@ -27,9 +27,19 @@ export default function Application(props) {
       .catch(function (error) {
         console.log(error);
       });
-
   };
 
+  const cancelInterview = function (id) {
+    return axios.delete("/api/appointments/" + id)
+      .then(function (response) {
+        const newAppointments = state.appointments;
+        newAppointments[id].interview =  null;
+        setState({...state, appointments: newAppointments });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   const [state, setState] = useState({ 
       day: "Monday", 
       days: [], 
@@ -64,6 +74,7 @@ export default function Application(props) {
         time={item.time}
         interview={interview}
         bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
         interviewers={interviewers}
         //{...item}
       />
