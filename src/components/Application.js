@@ -1,65 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
-//needed to install axios >npm install axios
-
 import "components/Application.scss";
+import useApplicationData from "../hooks/useApplicationData";
 import Appointment from "./Appointment";
 import DayList from "./DayList";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors";
 
 export default function Application(props) {
-  
-  const bookInterview = function (id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview }
-    };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
-
-    return axios.put("/api/appointments/" + id, { interview })
-      .then(function (response) {
-        setState({...state, appointments});
-      })
-      .catch(function (error) {
-        throw new Error(error);
-      });
-  };
-
-  const cancelInterview = function (id) {
-    return axios.delete("/api/appointments/" + id)
-      .then(function (response) {
-        const newAppointments = state.appointments;
-        newAppointments[id].interview =  null;
-        setState({...state, appointments: newAppointments });
-      })
-      .catch(function (error) {
-        throw new Error(error);
-      });
-  };
-  const [state, setState] = useState({ 
-      day: "Monday", 
-      days: [], 
-      appointments:{}, 
-      interviewers:{} 
-  });
-
-  const setDay = day => setState({ ...state, day });
-
-  useEffect(() => {
-    Promise.all([
-      axios.get("/api/days"),
-      axios.get("/api/appointments"),
-      axios.get("/api/interviewers")
-    ])
-      .then((all) => {
-        setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}));
-    })
-      .catch(err => {});    //console.log("err:",err.message)
-
-  }, []);
+  const {state,
+    setDay,
+    bookInterview,
+    cancelInterview
+  } = useApplicationData();
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const interviewers = getInterviewersForDay(state, state.day);
@@ -108,4 +58,4 @@ export default function Application(props) {
       </section>
     </main>
   );
-}
+};
