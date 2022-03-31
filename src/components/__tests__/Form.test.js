@@ -1,4 +1,11 @@
-import { render, cleanup, fireEvent, getByText, screen , prettyDOM} from "@testing-library/react";
+import {
+  render,
+  cleanup,
+  fireEvent,
+  getByText,
+  screen,
+  prettyDOM,
+} from "@testing-library/react";
 
 import Form from "components/Appointment/Form";
 
@@ -9,8 +16,8 @@ describe("Form", () => {
     {
       id: 1,
       student: "Sylvia Palmer",
-      avatar: "https://i.imgur.com/LpaY82x.png"
-    }
+      avatar: "https://i.imgur.com/LpaY82x.png",
+    },
   ];
 
   it("renders without student name if not provided", () => {
@@ -37,7 +44,7 @@ describe("Form", () => {
     /* 3. Click the save button */
     const saveButton = screen.getByText("Save");
     fireEvent.click(saveButton);
-  
+
     const valItem = screen.getByText(/student name cannot be blank/i);
     expect(valItem).toBeInTheDocument();
     expect(onSave).not.toHaveBeenCalled();
@@ -48,20 +55,20 @@ describe("Form", () => {
     const { getByText, getByPlaceholderText, queryByText } = render(
       <Form interviewers={interviewers} onSave={onSave} />
     );
-  
+
     fireEvent.click(getByText("Save"));
-  
+
     expect(getByText(/student name cannot be blank/i)).toBeInTheDocument();
     expect(onSave).not.toHaveBeenCalled();
-  
+
     fireEvent.change(getByPlaceholderText("Enter Student Name"), {
-      target: { value: "Lydia Miller-Jones" }
+      target: { value: "Lydia Miller-Jones" },
     });
-  
+
     fireEvent.click(getByText("Save"));
-  
+
     expect(queryByText(/student name cannot be blank/i)).toBeNull();
-  
+
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", null);
   });
@@ -76,19 +83,19 @@ describe("Form", () => {
         onCancel={onCancel}
       />
     );
-  
+
     fireEvent.click(getByText("Save"));
-  
+
     fireEvent.change(getByPlaceholderText("Enter Student Name"), {
-      target: { value: "Lydia Miller-Jones" }
+      target: { value: "Lydia Miller-Jones" },
     });
-  
+
     fireEvent.click(getByText("Cancel"));
-  
+
     expect(queryByText(/student name cannot be blank/i)).toBeNull();
-  
+
     expect(getByPlaceholderText("Enter Student Name")).toHaveValue("");
-  
+
     expect(onCancel).toHaveBeenCalledTimes(1);
   });
 });

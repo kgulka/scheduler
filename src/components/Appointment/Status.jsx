@@ -1,4 +1,3 @@
-
 export default function Status(props) {
   return (
     <main className="appointment__card appointment__card--status">

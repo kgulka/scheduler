@@ -22,97 +22,105 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-  function save (name, interviewer) {
+  function save(name, interviewer) {
     const interview = {
       student: name,
-      interviewer
-    }
+      interviewer,
+    };
     transition(SAVING);
-    return props.bookInterview(props.id, interview)
-      .then (() =>  transition(SHOW))
+    return props
+      .bookInterview(props.id, interview)
+      .then(() => transition(SHOW))
       .catch(function (error) {
         transition(ERROR_SAVE, true);
       });
-    } 
+  }
   function confirm() {
     transition(CONFIRM);
   }
-  function confirmDelete () {
+  function confirmDelete() {
     deleteInterview();
-  } 
-  function cancelDelete () {
+  }
+  function cancelDelete() {
     back();
-  } 
+  }
 
-  function deleteInterview () {
+  function deleteInterview() {
     transition(DELETE, true);
-    return props.cancelInterview(props.id)
-      .then (() =>  {
+    return props
+      .cancelInterview(props.id)
+      .then(() => {
         transition(EMPTY);
-       })
+      })
       .catch(function (error) {
         transition(ERROR_DELETE, true);
       });
-      
-  };
+  }
   return (
-
     <article className="appointment">
       <Header time={props.time} />
-      {mode === EMPTY && <Empty onAdd={() => {
-            console.log("Clicked onAdd"); 
+      {mode === EMPTY && (
+        <Empty
+          onAdd={() => {
+            console.log("Clicked onAdd");
             transition(CREATE);
-        }} />}
+          }}
+        />
+      )}
       {mode === SHOW && (
         <Show
-          student={props.interview? props.interview.student : null}
-          interviewer={props.interview? props.interview.interviewer: null}
+          student={props.interview ? props.interview.student : null}
+          interviewer={props.interview ? props.interview.interviewer : null}
           onDelete={confirm}
-          onEdit={()=>transition(EDIT)}
+          onEdit={() => transition(EDIT)}
         />
       )}
 
-      {mode === SAVING && (
-        <Status message={"Saving..."} />
-      )}
+      {mode === SAVING && <Status message={"Saving..."} />}
       {mode === CONFIRM && (
-        <Confirm 
+        <Confirm
           message="Do you want to delete this interview?"
-          onConfirm={confirmDelete} 
+          onConfirm={confirmDelete}
           onCancel={cancelDelete}
         />
-      )}       
-      {mode === DELETE && (
-        <Status message={"Deleting..."} />
-      )}       
+      )}
+      {mode === DELETE && <Status message={"Deleting..."} />}
       {mode === CREATE && (
         <Form
           interviewers={props.interviewers}
           onSave={save}
-          onCancel={() => {back(); }}
+          onCancel={() => {
+            back();
+          }}
         />
       )}
       {mode === EDIT && (
         <Form
-        interviewers={props.interviewers}
-        student={props.interview? props.interview.student : null}
-        interviewer={props.interview? props.interview.interviewer.id : null}
-        onSave={save}
-        onCancel={() => {back(); }}
-      />
+          interviewers={props.interviewers}
+          student={props.interview ? props.interview.student : null}
+          interviewer={props.interview ? props.interview.interviewer.id : null}
+          onSave={save}
+          onCancel={() => {
+            back();
+          }}
+        />
       )}
       {mode === ERROR_DELETE && (
-        <Error 
-        message="Could not save appointment." 
-        onClose={() => {back();}}  
-      />
-      )}       
-      {mode === ERROR_SAVE && (
-        <Error 
-          message="Could not save appointment." 
-          onClose={() => {back();}} 
+        <Error
+          message="Could not save appointment."
+          onClose={() => {
+            back();
+          }}
         />
-      )}       
+      )}
+      {mode === ERROR_SAVE && (
+        <Error
+          message="Could not save appointment."
+          onClose={() => {
+            back();
+          }}
+        />
+      )}
     </article>
   );
 }
