@@ -1,6 +1,7 @@
 # Interview Scheduler
 
-Interview Scheduler is an app created as part the course material for LightHouse Labs Web Development Bootcamp. It's a cool app that allows you to schedule appointments for a week.
+Interview Scheduler is an app created as part the course material for LightHouse Labs Web Development Bootcamp. It's a cool app that allows you to schedule appointments for a week.  
+The Interview Scheduler relies on the Scheduler API project for it's backend.
 
 ## Screen Shots
 
@@ -11,6 +12,8 @@ Interview Scheduler is an app created as part the course material for LightHouse
 !["Full Day"](https://github.com/kgulka/scheduler/blob/master/docs/schedulerScreen_Full_Day.png?raw=true)
 
 ## Setup
+
+Note: Please install and run the Scheduler API before attempting to start the Interview Scheduler app. Please see the Scheduler API for details on installation.
 
 Install dependencies with `npm install`.
 
